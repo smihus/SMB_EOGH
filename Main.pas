@@ -4,15 +4,16 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Data.Win.ADODB, Vcl.StdCtrls,
-  SMBBaseForm;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SMBBaseMDIForm, System.Actions,
+  Vcl.ActnList, Vcl.Menus, DBConnection, UsersForm, UsersModel, Data.DB,
+  Data.Win.ADODB;
 
 type
-  TfmMain = class(TForm)
-    Button1: TButton;
-    procedure Button1Click(Sender: TObject);
+  TfmMain = class(TBaseMDIForm)
+    aOpenUsers: TAction;
+    N4: TMenuItem;
+    procedure aOpenUsersExecute(Sender: TObject);
   private
-    FSMBBaseForm: TfmSMBBaseForm;
     { Private declarations }
   public
     { Public declarations }
@@ -22,15 +23,14 @@ var
   fmMain: TfmMain;
 
 implementation
-uses
-  DBConnection;
+
 {$R *.dfm}
 
-procedure TfmMain.Button1Click(Sender: TObject);
+procedure TfmMain.aOpenUsersExecute(Sender: TObject);
 begin
-  if not Assigned(FSMBBaseForm) then
-    FSMBBaseForm := TfmSMBBaseForm.Create(Self);
-  FSMBBaseForm.Show;
+  inherited;
+  fmUsers := TfmUsers.Create(Self);
+  fmUsers.Show;
 end;
 
 end.

@@ -1,25 +1,19 @@
-object fmMain: TfmMain
-  Left = 0
-  Top = 0
+inherited fmMain: TfmMain
   Caption = 'fmMain'
-  ClientHeight = 282
-  ClientWidth = 418
-  Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'Tahoma'
-  Font.Style = []
-  OldCreateOrder = False
+  WindowState = wsMaximized
   PixelsPerInch = 96
   TextHeight = 13
-  object Button1: TButton
-    Left = 176
-    Top = 208
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 0
-    OnClick = Button1Click
+  inherited mmMenu: TMainMenu
+    inherited N1: TMenuItem
+      object N4: TMenuItem
+        Action = aOpenUsers
+      end
+    end
+  end
+  inherited alMain: TActionList
+    object aOpenUsers: TAction
+      Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1080
+      OnExecute = aOpenUsersExecute
+    end
   end
 end

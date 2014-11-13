@@ -3,8 +3,14 @@ program SMB_EOGH;
 uses
   Vcl.Forms,
   DBConnection in 'DBConnection.pas',
+  SMBBaseForm in '..\SMBTemplates\Forms\SMBBaseForm.pas' {fmSMBBaseForm},
+  SMBBaseMDIForm in '..\SMBTemplates\Forms\SMBBaseMDIForm.pas' {BaseMDIForm},
   Main in 'Main.pas' {fmMain},
-  SMBBaseForm in '..\SMBTemplates\Forms\SMBBaseForm.pas' {fmSMBBaseForm};
+  UsersForm in 'UsersForm.pas' {fmUsers},
+  SMBBaseDialogForm in '..\SMBTemplates\Forms\SMBBaseDialogForm.pas' {SMBBaseDialogForm},
+  UsersModel in 'UsersModel.pas',
+  SMBModel in '..\SMBLibs\SMBModel.pas',
+  SMB.DBUtils in '..\SMBLibs\SMB.DBUtils.pas';
 
 {$R *.res}
 
