@@ -39,7 +39,7 @@ end;
 
 function TfmMain.CreateFormFactory: TSMBFormFactory;
 begin
-  Result := TFormFactory.Create;
+  Result := TEOGHFormFactory.Create;
 end;
 
 end.

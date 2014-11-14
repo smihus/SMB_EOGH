@@ -12,7 +12,7 @@ uses
   SMBModel in '..\SMBLibs\SMBModel.pas',
   SMB.DBUtils in '..\SMBLibs\SMB.DBUtils.pas',
   SMBFormFactory in '..\SMBLibs\SMBFormFactory.pas',
-  FormFactory in 'FormFactory.pas';
+  EOGHFormFactory in 'EOGHFormFactory.pas';
 
 {$R *.res}
 

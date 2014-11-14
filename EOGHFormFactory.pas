@@ -6,7 +6,7 @@ uses
   SMBFormFactory, Vcl.Forms, System.Classes;
 
 type
-  TFormFactory = class(TSMBFormFactory)
+  TEOGHFormFactory = class(TSMBFormFactory)
   public
     function createForm(aName: string; aOwner: TComponent): TForm; override;
   end;
@@ -18,7 +18,7 @@ uses
 
 { TFormFactory }
 
-function TFormFactory.createForm(aName: string; aOwner: TComponent): TForm;
+function TEOGHFormFactory.createForm(aName: string; aOwner: TComponent): TForm;
 begin
   if aName = 'Users' then
     Result := TfmUsers.Create(aOwner)
