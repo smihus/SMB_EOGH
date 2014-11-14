@@ -18,9 +18,6 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-var
-  fmUsers: TfmUsers;
-
 implementation
 
 {$R *.dfm}

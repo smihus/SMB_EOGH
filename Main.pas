@@ -5,18 +5,19 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SMBBaseMDIForm, System.Actions,
-  Vcl.ActnList, Vcl.Menus, DBConnection, UsersForm, UsersModel, Data.DB,
-  Data.Win.ADODB;
+  Vcl.ActnList, Vcl.Menus, DBConnection, Data.DB,
+  Data.Win.ADODB, SMBFormFactory, FormFactory;
 
 type
   TfmMain = class(TBaseMDIForm)
     aOpenUsers: TAction;
     N4: TMenuItem;
+    N5: TMenuItem;
+    aOpenRoles: TAction;
     procedure aOpenUsersExecute(Sender: TObject);
-  private
-    { Private declarations }
-  public
-    { Public declarations }
+    procedure aOpenRolesExecute(Sender: TObject);
+  protected
+    function CreateFormFactory(): TSMBFormFactory; override;
   end;
 
 var
@@ -26,11 +27,19 @@ implementation
 
 {$R *.dfm}
 
+procedure TfmMain.aOpenRolesExecute(Sender: TObject);
+begin
+  CreateAndShowMDIChild('Roles');
+end;
+
 procedure TfmMain.aOpenUsersExecute(Sender: TObject);
 begin
-  inherited;
-  fmUsers := TfmUsers.Create(Self);
-  fmUsers.Show;
+  CreateAndShowMDIChild('Users');
+end;
+
+function TfmMain.CreateFormFactory: TSMBFormFactory;
+begin
+  Result := TFormFactory.Create;
 end;
 
 end.

@@ -10,7 +10,9 @@ uses
   SMBBaseDialogForm in '..\SMBTemplates\Forms\SMBBaseDialogForm.pas' {SMBBaseDialogForm},
   UsersModel in 'UsersModel.pas',
   SMBModel in '..\SMBLibs\SMBModel.pas',
-  SMB.DBUtils in '..\SMBLibs\SMB.DBUtils.pas';
+  SMB.DBUtils in '..\SMBLibs\SMB.DBUtils.pas',
+  SMBFormFactory in '..\SMBLibs\SMBFormFactory.pas',
+  FormFactory in 'FormFactory.pas';
 
 {$R *.res}
 
