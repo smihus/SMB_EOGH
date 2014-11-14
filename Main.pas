@@ -4,7 +4,7 @@ interface
 
 uses
   System.Actions, Vcl.ActnList, Vcl.Menus,
-  SMBFormFactory, FormFactory, SMBBaseMDIForm, System.Classes;
+  SMBFormFactory, SMBBaseMDIForm, System.Classes;
 
 type
   TfmMain = class(TBaseMDIForm)
@@ -23,6 +23,8 @@ var
 
 implementation
 
+uses
+  EOGHFormFactory;
 {$R *.dfm}
 
 procedure TfmMain.aOpenRolesExecute(Sender: TObject);

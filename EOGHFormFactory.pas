@@ -1,4 +1,4 @@
-unit FormFactory;
+unit EOGHFormFactory;
 
 interface
 
