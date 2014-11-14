@@ -3,10 +3,8 @@ unit Main;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SMBBaseMDIForm, System.Actions,
-  Vcl.ActnList, Vcl.Menus, DBConnection, Data.DB,
-  Data.Win.ADODB, SMBFormFactory, FormFactory;
+  System.Actions, Vcl.ActnList, Vcl.Menus,
+  SMBFormFactory, FormFactory, SMBBaseMDIForm, System.Classes;
 
 type
   TfmMain = class(TBaseMDIForm)
