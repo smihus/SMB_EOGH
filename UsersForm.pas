@@ -3,15 +3,13 @@ unit UsersForm;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SMBBaseDialogForm, Vcl.StdCtrls,
-  Vcl.ExtCtrls, UsersModel, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls,
-  DynVarsEh, GridsEh, DBAxisGridsEh, DBGridEh;
+  UsersModel, SMBBaseMDIChild, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls,
+  DynVarsEh, GridsEh, DBAxisGridsEh, DBGridEh, Vcl.StdCtrls, System.Classes,
+  Vcl.Controls, Vcl.ExtCtrls;
 
 type
-  TfmUsers = class(TSMBBaseDialogForm)
+  TfmUsers = class(TSMBBaseMDIChild)
     gdUsers: TDBGridEh;
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FModel: TUsersModel;
   public
@@ -19,6 +17,8 @@ type
   end;
 
 implementation
+uses
+  SMBFormManager;
 
 {$R *.dfm}
 
@@ -31,10 +31,7 @@ begin
   gdUsers.DataSource := FModel.DataSource['Users'];
 end;
 
-procedure TfmUsers.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  inherited;
-  Action := caFree;
-end;
+initialization
+  DefaultSMBFormManager.RegisterForm('Users', TfmUsers, 'Справочники/Пользователи');
 
 end.
