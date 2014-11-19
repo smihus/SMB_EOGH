@@ -10,6 +10,7 @@ inherited fmUsers: TfmUsers
     Align = alClient
     DynProps = <>
     IndicatorOptions = [gioShowRowIndicatorEh]
+    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghDialogFind, dghColumnResize, dghColumnMove, dghAutoFitRowHeight, dghExtendVertLines]
     ReadOnly = True
     TabOrder = 1
     object RowDetailData: TRowDetailPanelControlEh
