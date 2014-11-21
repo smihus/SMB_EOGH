@@ -3,45 +3,55 @@ unit UsersForm;
 interface
 
 uses
-  UsersModel, SMBBaseMDIChild, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls,
+  SMBBaseMDIChild, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls,
   DynVarsEh, GridsEh, DBAxisGridsEh, DBGridEh, Vcl.StdCtrls, System.Classes,
-  Vcl.Controls, Vcl.ExtCtrls, SMB.Model, SMB.Controller;
+  Vcl.Controls, Vcl.ExtCtrls, Vcl.Menus, Vcl.ToolWin, Vcl.ActnMan,
+  Vcl.ActnCtrls, System.Actions, Vcl.ActnList, UsersModel;
 
 type
   TfmUsers = class(TSMBBaseMDIChild)
     gdUsers: TDBGridEh;
-  protected
-    function CreateModel: TModel; override;
-    function CreateController: TController; override;
+    alMain: TActionList;
+    aCreateUser: TAction;
+    aOpenUser: TAction;
+    aDeleteUser: TAction;
+    mmMain: TMainMenu;
+    miActions: TMenuItem;
+    miCreate: TMenuItem;
+    miUpdate: TMenuItem;
+    miDelete: TMenuItem;
+    procedure aOpenUserExecute(Sender: TObject);
+  private
+    FUsersModel: TUsersModel;
   public
     constructor Create(AOwner: TComponent); override;
   end;
 
 implementation
 uses
-  SMBFormManager, SMB.ConnectionManager, UsersController;
+  SMBFormManager, UserForm, SMB.ConnectionManager;
 
 {$R *.dfm}
 
 { TfmUsers }
 
+procedure TfmUsers.aOpenUserExecute(Sender: TObject);
+var
+  UserF: TfmUser;
+begin
+  inherited;
+  UserF := TfmUser.Create(Owner, FUsersModel.UserID);
+  UserF.Show;
+end;
+
 constructor TfmUsers.Create(AOwner: TComponent);
 begin
   inherited;
-  gdUsers.DataSource := Model.DataSource;
-end;
-
-function TfmUsers.CreateController: TController;
-begin
-  Result := TUsersController.Create(Self, Model);
-end;
-
-function TfmUsers.CreateModel: TModel;
-begin
-  Result := TUsersModel.Create(ConnectionManager);
+  FUsersModel         := TUsersModel.Create(ConnectionManager);
+  gdUsers.DataSource  := FUsersModel.DataSource;
 end;
 
 initialization
-  FormManager.RegisterForm('Users', TfmUsers, 'Справочники/Пользователи');
+  FormManager.RegisterForm('Users', TfmUsers, 'Администрирование/Пользователи');
 
 end.

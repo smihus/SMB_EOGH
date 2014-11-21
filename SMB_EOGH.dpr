@@ -8,9 +8,10 @@ uses
   SMBFormManager,
   SMBBaseMDIForm in '..\SMBTemplates\Forms\SMBBaseMDIForm.pas' {BaseMDIForm},
   SMBBaseForm in '..\SMBTemplates\Forms\SMBBaseForm.pas' {BaseForm},
-  SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
   SMB.ConnectionManager in '..\SMBLibs\SMB.ConnectionManager.pas',
-  SMB.Model in '..\SMBLibs\SMB.Model.pas';
+  SMB.Model in '..\SMBLibs\SMB.Model.pas',
+  SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
+  UserForm in 'UserForm.pas' {fmUser};
 
 {$R *.res}
 
