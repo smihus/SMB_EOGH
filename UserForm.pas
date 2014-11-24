@@ -16,6 +16,8 @@ type
     pUserData: TPanel;
     bnSave: TButton;
     procedure clbRolesClickCheck(Sender: TObject);
+    procedure bnSaveClick(Sender: TObject);
+    procedure bnCloseClick(Sender: TObject);
   private
     FUsersModel: TUsersModel;
     FChangeList: TList<String>;
@@ -23,7 +25,7 @@ type
     procedure GetUserRoles;
     procedure RegisterRoleChanges;
   public
-    constructor Create(AOwner: TComponent; AUserID: Integer); reintroduce;
+    constructor Create(AOwner: TComponent; AUserID: Integer = 0); reintroduce;
   end;
 
 var
@@ -31,14 +33,40 @@ var
 
 implementation
 uses
-  Data.Win.ADODB, SMB.ConnectionManager, Data.DB;
+  Data.Win.ADODB, SMB.ConnectionManager, Data.DB, System.UITypes;
 
 {$R *.dfm}
 
-procedure TfmUser.clbRolesClickCheck(Sender: TObject);
+procedure TfmUser.bnCloseClick(Sender: TObject);
+begin
+  if FRolesChanged then
+    if MessageDlg('Вы изменили роли пользователя. Сохранить изменения?',
+      mtConfirmation, mbYesNo, 0, mbYes) = mrYes then
+        bnSaveClick(Sender);
+  inherited;
+end;
+
+procedure TfmUser.bnSaveClick(Sender: TObject);
 var
-  ChangedItem: string;
+  Enum: TList<String>.TEnumerator;
   Index: Integer;
+begin
+  inherited;
+  Enum := FChangeList.GetEnumerator;
+  while Enum.MoveNext do
+  begin
+    Index := clbRoles.Items.IndexOf(Enum.Current);
+    if clbRoles.Checked[Index] then
+      FUsersModel.AddRole(Enum.Current)
+    else
+      FUsersModel.RemoveRole(Enum.Current);
+  end;
+  FRolesChanged := False;
+  FChangeList.Clear;
+  bnSave.Enabled := FRolesChanged;
+end;
+
+procedure TfmUser.clbRolesClickCheck(Sender: TObject);
 begin
   inherited;
   RegisterRoleChanges;
@@ -49,7 +77,10 @@ constructor TfmUser.Create(AOwner: TComponent; AUserID: Integer);
 begin
   inherited Create(AOwner);
   FUsersModel := TUsersModel.Create(ConnectionManager);
-  FUsersModel.UserID := AUserID;
+  if AUserID = 0 then
+    FUsersModel.NewUser
+  else
+    FUsersModel.UserID := AUserID;
   with eLoginName do
   begin
     DataSource  := FUsersModel.DataSource;
@@ -87,7 +118,6 @@ end;
 procedure TfmUser.RegisterRoleChanges;
 var
   ChangedItem: string;
-  Index: Integer;
 begin
   ChangedItem := clbRoles.Items[clbRoles.ItemIndex];
   if FChangeList.Contains(ChangedItem) then
