@@ -11,7 +11,8 @@ uses
   SMB.ConnectionManager in '..\SMBLibs\SMB.ConnectionManager.pas',
   SMB.Model in '..\SMBLibs\SMB.Model.pas',
   SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
-  UserForm in 'UserForm.pas' {fmUser};
+  UserForm in 'UserForm.pas' {fmUser},
+  SMB.DataChangesRegister in '..\SMBLibs\SMB.DataChangesRegister.pas';
 
 {$R *.res}
 

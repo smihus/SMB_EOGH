@@ -23,10 +23,12 @@ type
     procedure aOpenUserExecute(Sender: TObject);
     procedure aCreateUserExecute(Sender: TObject);
     procedure aDeleteUserExecute(Sender: TObject);
+    procedure gdUsersDblClick(Sender: TObject);
   private
     FUsersModel: TUsersModel;
   public
     constructor Create(AOwner: TComponent); override;
+    procedure UpdateData(UserID: Integer);
   end;
 
 implementation
@@ -42,7 +44,7 @@ var
   UserF: TfmUser;
 begin
   inherited;
-  UserF := TfmUser.Create(Owner);
+  UserF := TfmUser.Create(Self);
   UserF.Show;
 end;
 
@@ -59,7 +61,7 @@ var
   UserF: TfmUser;
 begin
   inherited;
-  UserF := TfmUser.Create(Owner, FUsersModel.UserID);
+  UserF := TfmUser.Create(Self, FUsersModel.UserID);
   UserF.Show;
 end;
 
@@ -68,6 +70,17 @@ begin
   inherited;
   FUsersModel         := TUsersModel.Create(ConnectionManager);
   gdUsers.DataSource  := FUsersModel.DataSource;
+end;
+
+procedure TfmUsers.gdUsersDblClick(Sender: TObject);
+begin
+  inherited;
+  aOpenUserExecute(Sender);
+end;
+
+procedure TfmUsers.UpdateData(UserID: Integer);
+begin
+  FUsersModel.Update(UserID);
 end;
 
 initialization

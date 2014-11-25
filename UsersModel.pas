@@ -12,6 +12,7 @@ type
     procedure AddCalcStringField(DataSet: TDataSet; FieldName,
       DisplayLabel: String; DisplatySize: Integer);
     procedure DoCalculateFields(DataSet: TDataSet);
+    function GetLoginName: String;
   protected
     procedure Init; override;
   public
@@ -22,6 +23,8 @@ type
     procedure NewUser;
     procedure DeleteUser;
     property UserID: Integer read GetUserID write SetUserID;
+    property LoginName: String read GetLoginName;
+    procedure Update(UserID: Integer);
   end;
 
 implementation
@@ -91,6 +94,11 @@ begin
     FUsersRoles.TryGetValue(FieldByName('user_id').AsInteger, Role);
     FieldByName('CalcRoles').AsString := Role;
   end;
+end;
+
+function TUsersModel.GetLoginName: String;
+begin
+  Result := DataSource.DataSet.FieldValues['login_name'];
 end;
 
 function TUsersModel.GetUserID: Integer;
@@ -172,7 +180,7 @@ begin
   with DataSource.DataSet do
   begin
     Append;
-    FieldValues['login_name'] := '¬ведите логин пользовател€';
+    FieldValues['login_name'] := '';
     Post;
   end;
 
@@ -199,6 +207,14 @@ end;
 procedure TUsersModel.SetUserID(const Value: Integer);
 begin
   DataSource.DataSet.Locate('user_id', Value, [loPartialKey]);
+end;
+
+procedure TUsersModel.Update(UserID: Integer);
+begin
+  DataSource.DataSet.Active := False;
+  GetUsersRoles;
+  DataSource.DataSet.Active := True;
+  DataSource.DataSet.Locate('user_id', UserID, [loPartialKey]);
 end;
 
 end.

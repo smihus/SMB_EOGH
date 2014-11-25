@@ -1,19 +1,19 @@
 inherited fmUsers: TfmUsers
   Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1080
-  ClientHeight = 242
+  ClientHeight = 202
   Menu = mmMain
-  ExplicitHeight = 300
+  ExplicitHeight = 260
   PixelsPerInch = 96
   TextHeight = 13
   inherited plBottomButtons: TPanel
-    Top = 215
-    ExplicitTop = 215
+    Top = 175
+    ExplicitTop = 175
   end
   object gdUsers: TDBGridEh
     Left = 0
     Top = 0
     Width = 418
-    Height = 215
+    Height = 175
     Align = alClient
     DynProps = <>
     IndicatorOptions = [gioShowRowIndicatorEh]
@@ -23,6 +23,7 @@ inherited fmUsers: TfmUsers
     SearchPanel.FilterOnTyping = True
     STFilter.InstantApply = False
     TabOrder = 1
+    OnDblClick = gdUsersDblClick
     object RowDetailData: TRowDetailPanelControlEh
     end
   end

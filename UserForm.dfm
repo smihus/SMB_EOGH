@@ -24,6 +24,7 @@ inherited fmUser: TfmUser
       Height = 25
       Align = alRight
       Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
+      Enabled = False
       TabOrder = 1
       OnClick = bnSaveClick
     end
@@ -57,7 +58,6 @@ inherited fmUser: TfmUser
       Align = alTop
       Caption = #1056#1086#1083#1080
       Layout = tlBottom
-      ExplicitTop = 36
       ExplicitWidth = 24
     end
     object eLoginName: TDBEditEh
@@ -70,8 +70,8 @@ inherited fmUser: TfmUser
       DynProps = <>
       EditButtons = <>
       TabOrder = 0
-      Text = 'eLoginName'
       Visible = True
+      OnExit = eLoginNameExit
     end
     object clbRoles: TCheckListBox
       Left = 1
