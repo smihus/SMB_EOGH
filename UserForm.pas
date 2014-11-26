@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SMBBaseMDIChild, Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.Mask, DBCtrlsEh, Vcl.CheckLst, UsersModel, System.Generics.Collections,
-  SMB.DataChangesRegister;
+  SMB.DataChangesRegister, System.Actions, Vcl.ActnList, Vcl.Menus;
 
 type
   TfmUser = class(TSMBBaseMDIChild)
@@ -17,7 +17,6 @@ type
     pUserData: TPanel;
     bnSave: TButton;
     procedure clbRolesClickCheck(Sender: TObject);
-    procedure bnSaveClick(Sender: TObject);
     procedure eLoginNameExit(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
@@ -27,8 +26,10 @@ type
     procedure GetUserRoles;
     procedure RegisterRoleChanges;
     procedure FormControlsUpdate(const DataName: String; const Value: Boolean);
-    procedure Save;
     function Valid: Boolean;
+  protected
+    procedure GetFormActions(out CanCreateData, CanReadData, CanUpdateData, CanDeleteData: Boolean); override;
+    procedure DoUpdateData; override;
   public
     constructor Create(AOwner: TComponent; AUserID: Integer = 0); reintroduce;
   end;
@@ -38,14 +39,10 @@ var
 
 implementation
 uses
-  Data.Win.ADODB, SMB.ConnectionManager, Data.DB, System.UITypes, UsersForm;
+  Data.Win.ADODB, SMB.ConnectionManager, Data.DB, System.UITypes, UsersForm,
+  SMB.Validators;
 
 {$R *.dfm}
-
-procedure TfmUser.bnSaveClick(Sender: TObject);
-begin
-    Save;
-end;
 
 procedure TfmUser.clbRolesClickCheck(Sender: TObject);
 begin
@@ -62,11 +59,12 @@ begin
   FDCR.AfterDataChange := FormControlsUpdate;
   if AUserID = 0 then
   begin
-    FUsersModel.NewUser;
-    FDCR['LoginName'] := True;
+    FUsersModel.AppendUser;
   end
   else
     FUsersModel.UserID := AUserID;
+
+  aUpdate.Enabled   := False;
 
   with eLoginName do
   begin
@@ -77,11 +75,53 @@ begin
   GetUserRoles;
 end;
 
+procedure TfmUser.DoUpdateData;
+var
+  Enum: TList<String>.TEnumerator;
+  Index: Integer;
+begin
+  inherited;
+  if Valid then
+  begin
+    if FDCR['LoginName'] then
+    begin
+      FUsersModel.UpdateUser(eLoginName.Text);
+      FDCR['LoginName'] := False;
+    end;
+
+    if FDCR['Roles'] then
+    begin
+      Enum := FChangedRolesList.GetEnumerator;
+      while Enum.MoveNext do
+      begin
+        Index := clbRoles.Items.IndexOf(Enum.Current);
+        if clbRoles.Checked[Index] then
+          FUsersModel.AddRole(Enum.Current)
+        else
+          FUsersModel.RemoveRole(Enum.Current);
+      end;
+      FUsersModel.UpdateUserRoles;
+      FDCR['Roles'] := False;
+    end;
+
+    (Owner as TfmUsers).UpdateData(FUsersModel.UserID);{ TODO : Сделать оповещение по другому }
+  end;
+end;
+
 procedure TfmUser.eLoginNameExit(Sender: TObject);
 begin
   inherited;
   if FUsersModel.LoginName <> Trim(eLoginName.Text) then
     FDCR['LoginName'] := True;
+end;
+
+procedure TfmUser.GetFormActions(out CanCreateData, CanReadData, CanUpdateData,
+  CanDeleteData: Boolean);
+begin
+  CanCreateData := False;
+  CanReadData   := False;
+  CanUpdateData := True;
+  CanDeleteData := False;
 end;
 
 procedure TfmUser.GetUserRoles;
@@ -119,43 +159,12 @@ begin
   FDCR['Roles'] := (FChangedRolesList.Count > 0);
 end;
 
-procedure TfmUser.Save;
-var
-  Enum: TList<String>.TEnumerator;
-  Index: Integer;
-begin
-  if Valid then
-  begin
-    if FDCR['LoginName'] then
-    begin
-      FUsersModel.DataSource.DataSet.Post;
-      FDCR['LoginName'] := False;
-    end;
-
-    if FDCR['Roles'] then
-    begin
-      Enum := FChangedRolesList.GetEnumerator;
-      while Enum.MoveNext do
-      begin
-        Index := clbRoles.Items.IndexOf(Enum.Current);
-        if clbRoles.Checked[Index] then
-          FUsersModel.AddRole(Enum.Current)
-        else
-          FUsersModel.RemoveRole(Enum.Current);
-      end;
-      FDCR['Roles'] := False;
-    end;
-
-    (Owner as TfmUsers).UpdateData(FUsersModel.UserID);{ TODO : Сделать оповещение по другому }
-  end;
-end;
-
 procedure TfmUser.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
   if FDCR.DataChanged then
     if MessageDlg('Вы изменили данные пользователя. Сохранить изменения?',
       mtConfirmation, mbYesNo, 0, mbYes) = mrYes then
-        Save;
+        aUpdateExecute(Sender);
   inherited;
 end;
 
@@ -163,12 +172,19 @@ procedure TfmUser.FormControlsUpdate(const DataName: String; const Value: Boolea
 begin
   if (DataName = 'Roles') and not Value then
     FChangedRolesList.Clear;
-  bnSave.Enabled := FDCR.DataChanged;
+  aUpdate.Enabled := FDCR.DataChanged;
 end;
 
 function TfmUser.Valid: Boolean;
+var
+  ErrorMsg: string;
 begin
-  Result  := not (Trim(eLoginName.Text) = '');
+  Result  := HasStrValue('Логин пользователя', eLoginName.Text, ErrorMsg);
+  if not Result then
+  begin
+    MessageDlg(ErrorMsg, mtWarning, [mbOK], 0);
+    Abort;
+  end;
 end;
 
 end.

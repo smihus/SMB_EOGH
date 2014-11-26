@@ -1,6 +1,6 @@
 inherited fmUser: TfmUser
   Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1100' '
-  ClientHeight = 262
+  ClientHeight = 242
   ClientWidth = 284
   Constraints.MinHeight = 300
   Constraints.MinWidth = 300
@@ -9,9 +9,9 @@ inherited fmUser: TfmUser
   PixelsPerInch = 96
   TextHeight = 13
   inherited plBottomButtons: TPanel
-    Top = 235
+    Top = 215
     Width = 284
-    ExplicitTop = 235
+    ExplicitTop = 215
     ExplicitWidth = 284
     inherited bnClose: TButton
       Left = 208
@@ -22,18 +22,16 @@ inherited fmUser: TfmUser
       Top = 1
       Width = 75
       Height = 25
+      Action = aUpdate
       Align = alRight
-      Caption = #1057#1086#1093#1088#1072#1085#1080#1090#1100
-      Enabled = False
       TabOrder = 1
-      OnClick = bnSaveClick
     end
   end
-  object pUserData: TPanel
+  object pUserData: TPanel [1]
     Left = 0
     Top = 0
     Width = 284
-    Height = 235
+    Height = 215
     Align = alClient
     BevelOuter = bvNone
     Padding.Left = 1
@@ -77,11 +75,24 @@ inherited fmUser: TfmUser
       Left = 1
       Top = 48
       Width = 282
-      Height = 186
+      Height = 166
       OnClickCheck = clbRolesClickCheck
       Align = alClient
       ItemHeight = 13
+      PopupMenu = pmBase
       TabOrder = 1
     end
+  end
+  inherited alBase: TActionList
+    Left = 64
+    Top = 88
+  end
+  inherited mmBase: TMainMenu
+    Left = 24
+    Top = 88
+  end
+  inherited pmBase: TPopupMenu
+    Left = 104
+    Top = 88
   end
 end

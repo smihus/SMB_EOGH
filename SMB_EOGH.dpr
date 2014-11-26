@@ -10,9 +10,11 @@ uses
   SMBBaseForm in '..\SMBTemplates\Forms\SMBBaseForm.pas' {BaseForm},
   SMB.ConnectionManager in '..\SMBLibs\SMB.ConnectionManager.pas',
   SMB.Model in '..\SMBLibs\SMB.Model.pas',
-  SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
   UserForm in 'UserForm.pas' {fmUser},
-  SMB.DataChangesRegister in '..\SMBLibs\SMB.DataChangesRegister.pas';
+  SMB.DataChangesRegister in '..\SMBLibs\SMB.DataChangesRegister.pas',
+  SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
+  RolesForm in 'RolesForm.pas' {fmRoles},
+  SMB.Validators in '..\SMBLibs\SMB.Validators.pas';
 
 {$R *.res}
 

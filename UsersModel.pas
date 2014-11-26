@@ -7,10 +7,10 @@ type
   TUsersModel = class (TModel)
   private
     FUsersRoles: TDictionary<Integer, String>;
+    FNewUser: Boolean;
     function GetUserID: Integer;
     procedure SetUserID(const Value: Integer);
-    procedure AddCalcStringField(DataSet: TDataSet; FieldName,
-      DisplayLabel: String; DisplatySize: Integer);
+
     procedure DoCalculateFields(DataSet: TDataSet);
     function GetLoginName: String;
   protected
@@ -20,46 +20,21 @@ type
     procedure GetUsersRoles;
     procedure AddRole(RoleName: String);
     procedure RemoveRole(RoleName: String);
-    procedure NewUser;
+    procedure AppendUser;
     procedure DeleteUser;
     property UserID: Integer read GetUserID write SetUserID;
     property LoginName: String read GetLoginName;
-    procedure Update(UserID: Integer);
+    procedure Update;
+    procedure UpdateUser(const LoginName: string);
+    procedure UpdateUserRoles;
   end;
 
 implementation
 
 uses
-  SMB.ConnectionManager, System.Classes;
+  SMB.ConnectionManager;
 
 { TUsersModel }
-
-procedure TUsersModel.AddCalcStringField(DataSet: TDataSet; FieldName,DisplayLabel: String; DisplatySize:
-Integer);
-var
-  f : TField;
-  i : Integer;
-begin
-  with DataSet do
-  begin
-    FieldDefs.Update;
-    Active := False;
-    for i := 0 to FieldDefs.Count - 1 do
-      if not Assigned(FindField(FieldDefs[i].Name)) then
-        FieldDefs.Items[i].CreateField(DataSet);
-    f := tStringField.Create(DataSet);
-    f.Name := DataSet.Name+FieldName;
-    f.FieldName := FieldName;
-    f.DisplayLabel := DisplayLabel;
-    f.DisplayWidth := DisplatySize;
-    f.Size         := DisplatySize;
-    f.Calculated := True;
-    f.DataSet := DataSet;
-
-    FieldDefs.Update;
-    Active := True;
-  end;
-end;
 
 procedure TUsersModel.AddRole(RoleName: String);
 var
@@ -150,13 +125,20 @@ begin
   begin
     Active      := False;
     Connection  := ConnectionManager.Connection['EOGH'];
-    SQL.Text    :=
-      'select r.name as Role, ' +
-      '(CASE WHEN ur.user_id IS NULL THEN 0 ELSE 1 END) as Checked ' +
-      'from Roles r ' +
-      'left join UsersRoles ur ' +
-      'on ur.role_id = r.role_id and ur.user_id = :user_id';
-    Parameters.ParamValues['user_id'] := UserID;
+    if not FNewUser then
+    begin
+      SQL.Text    :=
+        'select r.name as Role, ' +
+        '(CASE WHEN ur.user_id IS NULL THEN 0 ELSE 1 END) as Checked ' +
+        'from Roles r ' +
+        'left join UsersRoles ur ' +
+        'on ur.role_id = r.role_id and ur.user_id = :user_id';
+      Parameters.ParamValues['user_id'] := UserID;
+    end
+    else
+      SQL.Text    :=
+        'select distinct r.name as Role, 0 as Checked ' +
+        'from Roles r';
     Active := True;
   end;
 end;
@@ -164,6 +146,7 @@ end;
 procedure TUsersModel.Init;
 begin
   inherited;
+  FNewUser := False;
   DataSource.DataSet.OnCalcFields := DoCalculateFields;
   FUsersRoles := TDictionary<Integer, String>.Create;
   ExecQuery('select user_id, login_name from Users order by user_id asc');
@@ -175,15 +158,14 @@ begin
   DataSource.DataSet.Active := True;
 end;
 
-procedure TUsersModel.NewUser;
+procedure TUsersModel.AppendUser;
 begin
   with DataSource.DataSet do
   begin
     Append;
     FieldValues['login_name'] := '';
-    Post;
   end;
-
+  FNewUser := True;
 end;
 
 procedure TUsersModel.RemoveRole(RoleName: String);
@@ -209,12 +191,37 @@ begin
   DataSource.DataSet.Locate('user_id', Value, [loPartialKey]);
 end;
 
-procedure TUsersModel.Update(UserID: Integer);
+procedure TUsersModel.Update;
+var
+  CurrentUserID: Integer;
 begin
-  DataSource.DataSet.Active := False;
-  GetUsersRoles;
-  DataSource.DataSet.Active := True;
-  DataSource.DataSet.Locate('user_id', UserID, [loPartialKey]);
+  CurrentUserID := UserID;
+  with DataSource.DataSet do
+  begin
+    Active := False;
+    GetUsersRoles;
+    Active := True;
+    Locate('user_id', CurrentUserID, [loPartialKey]);
+  end;
+end;
+
+procedure TUsersModel.UpdateUser(const LoginName: string);
+begin
+  with DataSource.DataSet do
+  begin
+    Post;
+    if FNewUser then
+    begin
+      Locate('login_name', LoginName, [loPartialKey]);
+      FNewUser := False;
+    end;
+  end;
+
+end;
+
+procedure TUsersModel.UpdateUserRoles;
+begin
+
 end;
 
 end.

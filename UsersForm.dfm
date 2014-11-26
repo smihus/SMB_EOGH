@@ -1,23 +1,33 @@
 inherited fmUsers: TfmUsers
   Caption = #1055#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1080
-  ClientHeight = 202
-  Menu = mmMain
-  ExplicitHeight = 260
+  ClientHeight = 439
+  ClientWidth = 584
+  Constraints.MinHeight = 400
+  Constraints.MinWidth = 600
+  ExplicitWidth = 600
+  ExplicitHeight = 497
   PixelsPerInch = 96
   TextHeight = 13
   inherited plBottomButtons: TPanel
-    Top = 175
-    ExplicitTop = 175
+    Top = 412
+    Width = 584
+    ExplicitTop = 412
+    ExplicitWidth = 584
+    inherited bnClose: TButton
+      Left = 508
+      ExplicitLeft = 508
+    end
   end
-  object gdUsers: TDBGridEh
+  object gdUsers: TDBGridEh [1]
     Left = 0
     Top = 0
-    Width = 418
-    Height = 175
+    Width = 584
+    Height = 412
     Align = alClient
     DynProps = <>
     IndicatorOptions = [gioShowRowIndicatorEh]
     OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghDialogFind, dghColumnResize, dghColumnMove, dghAutoFitRowHeight, dghExtendVertLines]
+    PopupMenu = pmBase
     ReadOnly = True
     SearchPanel.Enabled = True
     SearchPanel.FilterOnTyping = True
@@ -27,41 +37,16 @@ inherited fmUsers: TfmUsers
     object RowDetailData: TRowDetailPanelControlEh
     end
   end
-  object alMain: TActionList
-    Left = 384
-    Top = 72
-    object aCreateUser: TAction
-      Caption = #1044#1086#1073#1072#1074#1080#1090#1100
-      ShortCut = 45
-      OnExecute = aCreateUserExecute
-    end
-    object aOpenUser: TAction
-      Caption = #1054#1090#1082#1088#1099#1090#1100
-      ShortCut = 113
-      OnExecute = aOpenUserExecute
-    end
-    object aDeleteUser: TAction
-      Caption = #1059#1076#1072#1083#1080#1090#1100
-      ShortCut = 8238
-      OnExecute = aDeleteUserExecute
-    end
+  inherited alBase: TActionList
+    Left = 64
+    Top = 88
   end
-  object mmMain: TMainMenu
-    AutoMerge = True
-    Left = 384
-    Top = 120
-    object miActions: TMenuItem
-      Caption = #1044#1077#1081#1089#1090#1074#1080#1103
-      GroupIndex = 1
-      object miCreate: TMenuItem
-        Action = aCreateUser
-      end
-      object miUpdate: TMenuItem
-        Action = aOpenUser
-      end
-      object miDelete: TMenuItem
-        Action = aDeleteUser
-      end
-    end
+  inherited mmBase: TMainMenu
+    Left = 24
+    Top = 88
+  end
+  inherited pmBase: TPopupMenu
+    Left = 104
+    Top = 88
   end
 end
