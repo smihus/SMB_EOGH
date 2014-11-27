@@ -85,7 +85,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Main.pas">
+        <DCCReference Include="MainForm.pas">
             <Form>fmMain</Form>
         </DCCReference>
         <DCCReference Include="UsersForm.pas">
@@ -105,14 +105,19 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\SMBLibs\SMB.DataChangesRegister.pas"/>
-        <DCCReference Include="..\SMBTemplates\Forms\SMBBaseMDIChild.pas">
-            <Form>SMBBaseMDIChild</Form>
-        </DCCReference>
         <DCCReference Include="RolesForm.pas">
             <Form>fmRoles</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\SMBLibs\SMB.Validators.pas"/>
+        <DCCReference Include="..\SMBTemplates\Forms\SMBBaseMDIChild.pas">
+            <Form>SMBBaseMDIChild</Form>
+        </DCCReference>
+        <DCCReference Include="ObjectsForm.pas">
+            <Form>fmObjects</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="ObjectsModel.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

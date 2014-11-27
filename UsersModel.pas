@@ -24,7 +24,8 @@ type
     procedure DeleteUser;
     property UserID: Integer read GetUserID write SetUserID;
     property LoginName: String read GetLoginName;
-    procedure Update;
+    property IsNewUser: Boolean read FNewUser;
+    procedure Update(const AUserID: Integer = 0);
     procedure UpdateUser(const LoginName: string);
     procedure UpdateUserRoles;
   end;
@@ -32,7 +33,7 @@ type
 implementation
 
 uses
-  SMB.ConnectionManager;
+  SMB.ConnectionManager, System.SysUtils, Vcl.Dialogs, System.UITypes;
 
 { TUsersModel }
 
@@ -191,11 +192,11 @@ begin
   DataSource.DataSet.Locate('user_id', Value, [loPartialKey]);
 end;
 
-procedure TUsersModel.Update;
+procedure TUsersModel.Update(const AUserID: Integer = 0);
 var
   CurrentUserID: Integer;
 begin
-  CurrentUserID := UserID;
+  CurrentUserID := AUserID;
   with DataSource.DataSet do
   begin
     Active := False;
@@ -209,7 +210,16 @@ procedure TUsersModel.UpdateUser(const LoginName: string);
 begin
   with DataSource.DataSet do
   begin
-    Post;
+    try
+      Post;
+    except 
+      on E: Exception do 
+      begin
+        MessageDlg('Добавить нового пользователя не удалось, т.к. пользователь с логином "' + 
+          LoginName + '" уже существует.', mtError, [mbOK], 0);
+        Abort;
+      end;
+    end;
     if FNewUser then
     begin
       Locate('login_name', LoginName, [loPartialKey]);

@@ -17,8 +17,9 @@ type
     pUserData: TPanel;
     bnSave: TButton;
     procedure clbRolesClickCheck(Sender: TObject);
-    procedure eLoginNameExit(Sender: TObject);
+    procedure eLoginNameChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
   private
     FUsersModel: TUsersModel;
     FChangedRolesList: TList<String>;
@@ -58,13 +59,9 @@ begin
   FDCR  := TSMBDataChangesRegister.Create;
   FDCR.AfterDataChange := FormControlsUpdate;
   if AUserID = 0 then
-  begin
-    FUsersModel.AppendUser;
-  end
+    FUsersModel.AppendUser
   else
-    FUsersModel.UserID := AUserID;
-
-  aUpdate.Enabled   := False;
+    FUsersModel.UserID  := AUserID;
 
   with eLoginName do
   begin
@@ -104,11 +101,11 @@ begin
       FDCR['Roles'] := False;
     end;
 
-    (Owner as TfmUsers).UpdateData(FUsersModel.UserID);{ TODO : Сделать оповещение по другому }
+    (Owner as TfmUsers).Refresh(FUsersModel.UserID);{ TODO : Сделать оповещение по другому }
   end;
 end;
 
-procedure TfmUser.eLoginNameExit(Sender: TObject);
+procedure TfmUser.eLoginNameChange(Sender: TObject);
 begin
   inherited;
   if FUsersModel.LoginName <> Trim(eLoginName.Text) then
@@ -173,6 +170,15 @@ begin
   if (DataName = 'Roles') and not Value then
     FChangedRolesList.Clear;
   aUpdate.Enabled := FDCR.DataChanged;
+end;
+
+procedure TfmUser.FormShow(Sender: TObject);
+begin
+  inherited;
+  if FUsersModel.IsNewUser then
+    eLoginName.SetFocus
+  else
+    clbRoles.SetFocus;
 end;
 
 function TfmUser.Valid: Boolean;

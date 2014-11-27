@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, SMBBaseMDIChild, Vcl.StdCtrls,
   Vcl.ExtCtrls, DBGridEhGrouping, ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh,
-  GridsEh, DBAxisGridsEh, DBGridEh;
+  GridsEh, DBAxisGridsEh, DBGridEh, Vcl.Menus, System.Actions, Vcl.ActnList;
 
 type
   TfmRoles = class(TSMBBaseMDIChild)
@@ -22,6 +22,12 @@ var
 
 implementation
 
+uses
+  SMBFormManager;
+
 {$R *.dfm}
+
+initialization
+  FormManager.RegisterForm('fmRoles', TfmRoles, 'Администрирование/Роли');
 
 end.

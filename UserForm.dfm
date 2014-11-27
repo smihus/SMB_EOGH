@@ -4,6 +4,7 @@ inherited fmUser: TfmUser
   ClientWidth = 284
   Constraints.MinHeight = 300
   Constraints.MinWidth = 300
+  OnShow = FormShow
   ExplicitWidth = 300
   ExplicitHeight = 300
   PixelsPerInch = 96
@@ -69,7 +70,7 @@ inherited fmUser: TfmUser
       EditButtons = <>
       TabOrder = 0
       Visible = True
-      OnExit = eLoginNameExit
+      OnChange = eLoginNameChange
     end
     object clbRoles: TCheckListBox
       Left = 1

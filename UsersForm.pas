@@ -21,7 +21,7 @@ type
     procedure DoDeleteData; override;
   public
     constructor Create(AOwner: TComponent); override;
-    procedure UpdateData(UserID: Integer);
+    procedure Refresh(UserID: Integer);
   end;
 
 implementation
@@ -79,12 +79,12 @@ begin
   CanDeleteData := True;
 end;
 
-procedure TfmUsers.UpdateData(UserID: Integer);
+procedure TfmUsers.Refresh(UserID: Integer);
 begin
-  FUsersModel.Update;
+  FUsersModel.Update(UserID);
 end;
 
 initialization
-  FormManager.RegisterForm('Users', TfmUsers, 'Администрирование/Пользователи');
+  FormManager.RegisterForm('fmUsers', TfmUsers, 'Администрирование/Пользователи');
 
 end.

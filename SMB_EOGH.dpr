@@ -2,7 +2,7 @@ program SMB_EOGH;
 
 uses
   Vcl.Forms,
-  Main in 'Main.pas' {fmMain},
+  MainForm in 'MainForm.pas' {fmMain},
   UsersForm in 'UsersForm.pas' {fmUsers},
   UsersModel in 'UsersModel.pas',
   SMBFormManager,
@@ -12,9 +12,11 @@ uses
   SMB.Model in '..\SMBLibs\SMB.Model.pas',
   UserForm in 'UserForm.pas' {fmUser},
   SMB.DataChangesRegister in '..\SMBLibs\SMB.DataChangesRegister.pas',
-  SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
   RolesForm in 'RolesForm.pas' {fmRoles},
-  SMB.Validators in '..\SMBLibs\SMB.Validators.pas';
+  SMB.Validators in '..\SMBLibs\SMB.Validators.pas',
+  SMBBaseMDIChild in '..\SMBTemplates\Forms\SMBBaseMDIChild.pas' {SMBBaseMDIChild},
+  ObjectsForm in 'ObjectsForm.pas' {fmObjects},
+  ObjectsModel in 'ObjectsModel.pas';
 
 {$R *.res}
 
