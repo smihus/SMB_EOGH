@@ -1,22 +1,23 @@
 inherited fmObjects: TfmObjects
   Caption = #1054#1073#1098#1077#1082#1090#1099' '#1076#1083#1103' '#1085#1072#1079#1085#1072#1095#1077#1085#1080#1103' '#1087#1088#1072#1074' '#1087#1086#1083#1100#1079#1086#1074#1072#1090#1077#1083#1103#1084
-  ExplicitHeight = 300
+  ExplicitHeight = 280
   PixelsPerInch = 96
   TextHeight = 13
   inherited plBottomButtons: TPanel
-    ExplicitTop = 215
+    ExplicitTop = 195
   end
   object gdObjects: TDBGridEh [1]
     Left = 0
     Top = 0
     Width = 418
-    Height = 215
+    Height = 195
     Align = alClient
+    AllowedOperations = [alopUpdateEh]
     AutoFitColWidths = True
     DynProps = <>
     ImeMode = imDisable
     IndicatorOptions = [gioShowRowIndicatorEh]
-    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghDialogFind, dghColumnResize, dghColumnMove, dghAutoFitRowHeight, dghExtendVertLines]
+    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghDblClickOptimizeColWidth, dghDialogFind, dghRecordMoving, dghColumnResize, dghColumnMove, dghAutoFitRowHeight, dghExtendVertLines]
     PopupMenu = pmBase
     RowHeight = 4
     RowLines = 1

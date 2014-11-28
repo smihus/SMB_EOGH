@@ -8,7 +8,7 @@ uses
   System.Actions, Vcl.ActnList, Vcl.StdCtrls, Vcl.ExtCtrls, DBGridEhGrouping,
   ToolCtrlsEh, DBGridEhToolCtrls, DynVarsEh, MemTableDataEh, Data.DB,
   DataDriverEh, MemTableEh, Data.Win.ADODB, GridsEh, DBAxisGridsEh, DBGridEh,
-  ADODataDriverEh, ObjectsModel;
+  ADODataDriverEh, ObjectsModel, Vcl.DBCtrls;
 
 type
   TfmObjects = class(TSMBBaseMDIChild)
@@ -17,6 +17,8 @@ type
     FObjectsModel: TObjectsModel;
   protected
     procedure GetFormActions(out CanCreateData, CanReadData, CanUpdateData, CanDeleteData: Boolean); override;
+    procedure DoCreateData; override;
+    procedure DoDeleteData; override;
   public
     constructor Create(AOwner: TComponent); override;
   end;
@@ -27,7 +29,7 @@ var
 implementation
 
 uses
-  SMBFormManager, SMB.ConnectionManager;
+  SMBFormManager, SMB.ConnectionManager, System.UITypes;
 
 {$R *.dfm}
 
@@ -38,6 +40,21 @@ begin
   inherited;
   FObjectsModel         := TObjectsModel.Create(ConnectionManager);
   gdObjects.DataSource  := FObjectsModel.DataSource;
+end;
+
+procedure TfmObjects.DoCreateData;
+begin
+  inherited;
+  FObjectsModel.SaveCurrentObjectParent;
+  FObjectsModel.CreateObject;
+end;
+
+procedure TfmObjects.DoDeleteData;
+begin
+  inherited;
+  if MessageDlg('Вы действительно хотите удалить этот объект?',
+    mtConfirmation, mbYesNo, 0, mbNo) = mrYes then
+      FObjectsModel.DeleteObject;
 end;
 
 procedure TfmObjects.GetFormActions(out CanCreateData, CanReadData,

@@ -6,13 +6,11 @@ inherited fmUser: TfmUser
   Constraints.MinWidth = 300
   OnShow = FormShow
   ExplicitWidth = 300
-  ExplicitHeight = 300
   PixelsPerInch = 96
   TextHeight = 13
   inherited plBottomButtons: TPanel
     Top = 215
     Width = 284
-    ExplicitTop = 215
     ExplicitWidth = 284
     inherited bnClose: TButton
       Left = 208

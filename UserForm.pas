@@ -27,7 +27,7 @@ type
     procedure GetUserRoles;
     procedure RegisterRoleChanges;
     procedure FormControlsUpdate(const DataName: String; const Value: Boolean);
-    function Valid: Boolean;
+    function ValidateData: Boolean;
   protected
     procedure GetFormActions(out CanCreateData, CanReadData, CanUpdateData, CanDeleteData: Boolean); override;
     procedure DoUpdateData; override;
@@ -78,7 +78,7 @@ var
   Index: Integer;
 begin
   inherited;
-  if Valid then
+  if ValidateData then
   begin
     if FDCR['LoginName'] then
     begin
@@ -181,7 +181,7 @@ begin
     clbRoles.SetFocus;
 end;
 
-function TfmUser.Valid: Boolean;
+function TfmUser.ValidateData: Boolean;
 var
   ErrorMsg: string;
 begin
